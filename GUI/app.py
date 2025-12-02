@@ -114,7 +114,7 @@ left, right = st.columns([3, 4])
 
 with left:
     st.markdown(
-        '<div class="hero-badge">🚀 Smart Space Management</div>',
+        '<div class="hero-badge">🚀 Smart Library Information System</div>',
         unsafe_allow_html=True,
     )
     st.markdown(
