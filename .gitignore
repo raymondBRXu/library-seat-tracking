@@ -1,0 +1,19 @@
+# Ignore everything in the root directory
+/*
+
+# Unignore allowed directories
+!/data/
+!/GUI/
+!/models/
+!/src/
+
+# Unignore allowed files
+!setup.sh
+!README.md
+!.gitignore
+!requirements.txt
+# Common ignores (applied recursively)
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
