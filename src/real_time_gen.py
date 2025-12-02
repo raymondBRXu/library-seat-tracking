@@ -37,7 +37,13 @@ def signal_handler(sig, frame):
     running = False
     sys.exit(0)
 
-signal.signal(signal.SIGINT, signal_handler)
+# Only register signal handler if running as main script or in main thread
+try:
+    if __name__ == "__main__":
+        signal.signal(signal.SIGINT, signal_handler)
+except ValueError:
+    # Ignored if not in main thread
+    pass
 
 
 def get_last_timestamp(csv_file: Path) -> datetime:
@@ -95,23 +101,40 @@ def append_row_to_csv(csv_file: Path, row_data: dict, fieldnames: list):
     """
     Append a single row to the CSV file.
     Creates the file with headers if it doesn't exist.
+    Maintains a maximum of 500 rows (plus header).
     
     Args:
         csv_file: Path to the CSV file
         row_data: Dictionary with row data
         fieldnames: List of column names
     """
-    file_exists = csv_file.exists()
+    MAX_ROWS = 500
+    rows = []
     
-    with open(csv_file, 'a', newline='') as csvfile:
+    # Read existing data
+    if csv_file.exists():
+        try:
+            with open(csv_file, 'r') as f:
+                reader = csv.DictReader(f)
+                rows = list(reader)
+        except Exception as e:
+            print(f"Error reading CSV for append: {e}")
+            # If error reading, we might overwrite corrupt file or start fresh
+            # Let's try to append anyway by starting fresh if read failed significantly
+            pass
+
+    # Append new row
+    rows.append(row_data)
+    
+    # Prune if needed
+    if len(rows) > MAX_ROWS:
+        rows = rows[-MAX_ROWS:]
+    
+    # Write back entire file (atomic-ish update)
+    with open(csv_file, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        
-        # Write header if file is new
-        if not file_exists:
-            writer.writeheader()
-        
-        # Write the row
-        writer.writerow(row_data)
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def real_time_generate(

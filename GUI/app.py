@@ -1,4 +1,20 @@
 import streamlit as st
+import sys
+from pathlib import Path
+
+# Add project root to path to allow imports from src
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+from src.real_time_gen_deploy import start_background_generator
+
+# Initialize the background task (cached resource)
+@st.cache_resource
+def init_background_task():
+    return start_background_generator()
+
+init_background_task()
 
 st.set_page_config(page_title="Cornell Library – Welcome", layout="wide")
 
