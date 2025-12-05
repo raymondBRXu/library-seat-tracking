@@ -9,6 +9,7 @@
 
 # Unignore allowed files
 !setup.sh
+!setup_gitbash.sh
 !README.md
 !.gitignore
 !requirements.txt
