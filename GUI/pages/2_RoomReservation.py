@@ -3,6 +3,7 @@ import csv
 import pandas as pd
 from pathlib import Path
 from datetime import datetime, timedelta, time
+from zoneinfo import ZoneInfo
 from mailersend import MailerSendClient, EmailBuilder
 
 
@@ -82,7 +83,7 @@ def generate_time_slots(selected_date):
     Generate 30-minute time slots from 8:00 AM to 11:00 PM.
     If selected_date is today, start from the next hour or half hour.
     """
-    now = datetime.now()
+    now = datetime.now(ZoneInfo("America/New_York")).replace(tzinfo=None)
     slots = []
     
     start_time = datetime.combine(selected_date, time(8, 0))
@@ -137,7 +138,7 @@ if hasattr(st, "dialog"):
         st.markdown("### Select Date & Time")
         
         # Date Selection
-        min_date = datetime.now().date()
+        min_date = datetime.now(ZoneInfo("America/New_York")).date()
         max_date = min_date + timedelta(days=7)
         
         selected_date = st.date_input(
@@ -429,4 +430,4 @@ else:
 
     # Display current time at bottom
     st.write("")
-    st.caption(f"Current time: {datetime.now().strftime('%I:%M:%S %p')}")
+    st.caption(f"Current time: {datetime.now(ZoneInfo('America/New_York')).strftime('%I:%M:%S %p')}")
