@@ -2,6 +2,7 @@ import streamlit as st
 import csv
 import urllib.parse
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 import sys
 
@@ -279,9 +280,9 @@ with detail_col:
             csv_time = datetime.fromisoformat(st.session_state["last_csv_timestamp"])
             st.caption(f"Last updated: {csv_time.strftime('%I:%M:%S %p')} ({csv_time.strftime('%Y-%m-%d')})")
         except (ValueError, TypeError):
-            st.caption(f"Last updated: {datetime.now().strftime('%I:%M:%S %p')}")
+            st.caption(f"Last updated: {datetime.now(ZoneInfo('America/New_York')).strftime('%I:%M:%S %p')}")
     else:
-        st.caption(f"Last updated: {datetime.now().strftime('%I:%M:%S %p')} (using static data)")
+        st.caption(f"Last updated: {datetime.now(ZoneInfo('America/New_York')).strftime('%I:%M:%S %p')} (using static data)")
 
     # ----- table-like grid for floors (now directly under the header) -----
     rows_md = []

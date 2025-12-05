@@ -2,6 +2,7 @@ import threading
 import time
 import sys
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from ultralytics import YOLO
 import csv
@@ -145,7 +146,8 @@ def start_background_generator():
         while True:
             try:
                 start_time = time.time()
-                timestamp = datetime.now().replace(microsecond=0)
+                # Use Eastern Time, but keep naive format for CSV consistency
+                timestamp = datetime.now(ZoneInfo("America/New_York")).replace(microsecond=0, tzinfo=None)
                 
                 # Get counts for current frame index
                 counts = count_people_in_images(model, frame_index)
