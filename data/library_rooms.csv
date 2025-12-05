@@ -1,0 +1,58 @@
+Library,Room,Noise,People,Project,Whiteboard,Window
+Mann Library,Mann 100 Seminar Room,Collaborative,8,1,1,1
+Mann Library,Mann 102 Conference Room,Collaborative,10,1,1,1
+Mann Library,Mann 160 Seminar Room,Collaborative,6,1,0,1
+Mann Library,Mann 260 Group Study,Collaborative,6,1,1,0
+Mann Library,Mann 261 Group Study,Collaborative,4,0,1,1
+Mann Library,Mann 270 Group Study,Collaborative,8,1,0,0
+Mann Library,Mann 360 Group Study,Collaborative,6,0,1,0
+Mann Library,Mann 361 Group Study,Collaborative,5,1,1,1
+Mann Library,Mann 370 Group Study,Collaborative,7,0,0,1
+Mann Library,Bissett Collaborative Space1,Collaborative,8,1,1,1
+Mann Library,Bissett Collaborative Space2,Collaborative,6,1,0,1
+Mann Library,Mann 271 Study Room,Silent,4,0,1,0
+Mann Library,Mann 272 Study Room,Silent,5,0,0,1
+Mann Library,Mann 273 Study Room,Silent,6,1,1,0
+Mann Library,Mann 274 Study Room,Silent,4,1,0,0
+Mann Library,Mann 276 Study Room,Silent,7,0,1,1
+Mann Library,Mann 277 Study Room,Silent,8,1,1,0
+Mann Library,Mann 278 Study Room,Silent,6,0,0,1
+Mann Library,Mann 280 Study Room,Silent,5,1,0,0
+Mann Library,Mann 371 Study Room,Silent,4,0,1,1
+Mann Library,Mann 372 Study Room,Silent,9,1,1,1
+Mann Library,Mann 373 Study Room,Silent,7,0,0,0
+Mann Library,Mann 374 Study Room,Silent,6,1,0,1
+Mann Library,Mann 376 Study Room,Silent,5,0,1,0
+Mann Library,Mann 377 Study Room,Silent,4,1,1,0
+Mann Library,Mann 378 Study Room,Silent,8,0,0,1
+Mann Library,Mann 380 Study Room,Silent,10,1,1,1
+Mann Library,Mann 381 Study Room,Silent,6,0,1,0
+Mann Library,Mann 3rd Floor Grad Study,Silent,6,0,0,1
+Mann Library,Mann 3rd Floor Grad Study,Silent,7,1,0,1
+Mann Library,Mann 3rd Floor Grad Study,Silent,5,0,1,0
+Mann Library,Mann 3rd Floor Grad Study,Silent,8,1,1,0
+Mann Library,Mann 3rd Floor Grad Study,Silent,4,0,1,1
+Mann Library,Mann 3rd Floor Grad Study,Silent,9,1,0,0
+Mann Library,Mann 3rd Floor Grad Study,Silent,10,0,1,0
+Uris Library,Uris 108 Interview Room,Collaborative,4,1,1,0
+Uris Library,Uris 4B02 Cocktail Lounge Study Room,Collaborative,6,1,1,1
+Uris Library,Uris 4B03 Cocktail Lounge Study Room,Collaborative,6,0,1,1
+Uris Library,Uris 4B04 Cocktail Lounge Study Room,Collaborative,8,1,0,1
+Olin Library,Olin 120B Group Study,Collaborative,6,1,1,0
+Olin Library,Olin 120A Group Study,Collaborative,4,0,1,1
+Olin Library,Olin 302 Group Study,Collaborative,8,1,0,1
+Olin Library,Olin 303 Group Study,Collaborative,5,0,0,1
+Olin Library,Olin 402 Group Study,Collaborative,7,1,1,0
+Olin Library,Olin 403 Group Study,Collaborative,9,1,0,0
+Olin Library,Olin 404 Group Study,Collaborative,6,0,1,0
+Olin Library,Olin 602 Group Study,Collaborative,10,1,1,1
+Olin Library,Olin 603 Group Study,Collaborative,4,0,0,1
+Engineering Library (Carpenter Hall),Engineering 103C Group Study,Collaborative,6,1,1,0
+Engineering Library (Carpenter Hall),Engineering 103D Group Study,Collaborative,6,0,1,1
+Catherwood Library (ILR School),Catherwood 136 Table A,Collaborative,6,1,0,1
+Catherwood Library (ILR School),Catherwood 136 Table B,Collaborative,4,0,1,1
+Catherwood Library (ILR School),Catherwood 136 Table C,Collaborative,5,1,1,0
+Catherwood Library (ILR School),Catherwood 231A Group Study,Collaborative,8,1,1,1
+Catherwood Library (ILR School),Catherwood 231B Group Study,Collaborative,7,0,0,1
+Catherwood Library (ILR School),Catherwood 230 Interview Room,Collaborative,4,0,1,0
+Clarke Africana Library,Africana Library 1st Floor Open Study,Collaborative,10,1,1,1

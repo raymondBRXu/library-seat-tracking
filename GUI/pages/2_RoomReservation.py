@@ -1,5 +1,6 @@
 import streamlit as st
 import csv
+import pandas as pd
 from pathlib import Path
 from datetime import datetime
 
@@ -51,6 +52,66 @@ def get_user_info(username: str, credentials: dict) -> dict:
     if username in credentials:
         return credentials[username]
     return {}
+
+
+def load_rooms(csv_path: str = "data/library_rooms.csv") -> pd.DataFrame:
+    """
+    Load room data from CSV file.
+    """
+    csv_file = Path(__file__).parent.parent.parent / csv_path
+    
+    if not csv_file.exists():
+        st.error(f"Room data file not found at {csv_file}")
+        return pd.DataFrame()
+    
+    try:
+        df = pd.read_csv(csv_file)
+        return df
+    except Exception as e:
+        st.error(f"Error loading room data: {e}")
+        return pd.DataFrame()
+
+
+# Define dialog wrapper
+if hasattr(st, "dialog"):
+    @st.dialog("Room Details")
+    def show_room_details(room):
+        st.subheader(room['Room'])
+        
+        # Display info
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(f"**📍 Library:** {room['Library']}")
+            st.markdown(f"**🔊 Noise Level:** {room['Noise']}")
+        with col2:
+            st.markdown(f"**👥 Capacity:** {room['People']} people")
+        
+        # Features
+        features = []
+        if room.get('Project', 0) == 1: features.append("Projector")
+        if room.get('Whiteboard', 0) == 1: features.append("Whiteboard")
+        if room.get('Window', 0) == 1: features.append("Window")
+        
+        if features:
+            st.markdown(f"**✨ Features:** {', '.join(features)}")
+        else:
+            st.markdown("**✨ Features:** None")
+            
+        st.markdown("---")
+        
+        # Reserve Button (No function)
+        st.button("Reserve", type="primary", key=f"reserve_{room['Room']}")
+else:
+    # Fallback for older streamlit versions
+    def show_room_details(room):
+        with st.expander(f"Details: {room['Room']}", expanded=True):
+            st.markdown(f"**Library:** {room['Library']} | **Noise:** {room['Noise']} | **Capacity:** {room['People']}")
+            features = []
+            if room.get('Project', 0) == 1: features.append("Projector")
+            if room.get('Whiteboard', 0) == 1: features.append("Whiteboard")
+            if room.get('Window', 0) == 1: features.append("Window")
+            st.markdown(f"**Features:** {', '.join(features) if features else 'None'}")
+            st.button("Reserve", key=f"reserve_{room['Room']}")
 
 
 def login_page(credentials: dict):
@@ -159,10 +220,85 @@ else:
     
     st.write("")  # spacer
     
-    # Main reservation content (placeholder for now)
-    st.markdown("### Welcome to Room Reservation")
-    st.markdown("Room reservation features will be implemented here.")
+    # Main reservation content
+    st.markdown("### Select a Room")
     
-    # Display current time
-    st.caption(f"Current time: {datetime.now().strftime('%I:%M:%S %p')}")
+    # Load room data
+    df_rooms = load_rooms()
+    
+    if not df_rooms.empty:
+        # Layout: Filters (1/3) and Rooms (2/3)
+        col_filters, col_rooms = st.columns([1, 2])
+        
+        with col_filters:
+            st.subheader("Filters")
+            
+            # Library Filter
+            libraries = sorted(df_rooms['Library'].unique().tolist())
+            selected_libraries = st.multiselect("Library", options=libraries, default=libraries)
+            
+            # Noise Filter
+            noise_levels = sorted(df_rooms['Noise'].unique().tolist())
+            selected_noise = st.multiselect("Noise Level", options=noise_levels, default=noise_levels)
+            
+            # Features Filter
+            st.markdown("**Features**")
+            filter_projector = st.checkbox("Projector")
+            filter_whiteboard = st.checkbox("Whiteboard")
+            filter_window = st.checkbox("Window")
+            
+            # Max People Filter (Slider 4-10)
+            st.markdown("**Max People**")
+            min_people = st.slider("Minimum Capacity", min_value=4, max_value=10, value=4)
+            
+        # Apply Filters
+        filtered_df = df_rooms.copy()
+        
+        if selected_libraries:
+            filtered_df = filtered_df[filtered_df['Library'].isin(selected_libraries)]
+            
+        if selected_noise:
+            filtered_df = filtered_df[filtered_df['Noise'].isin(selected_noise)]
+            
+        if filter_projector:
+            filtered_df = filtered_df[filtered_df['Project'] == 1]
+        if filter_whiteboard:
+            filtered_df = filtered_df[filtered_df['Whiteboard'] == 1]
+        if filter_window:
+            filtered_df = filtered_df[filtered_df['Window'] == 1]
+            
+        # Filter by Capacity
+        filtered_df = filtered_df[filtered_df['People'] >= min_people]
+        
+        # Display Rooms
+        with col_rooms:
+            st.subheader(f"Available Rooms ({len(filtered_df)})")
+            
+            # Convert to list of dicts for easier iteration
+            rooms_list = filtered_df.to_dict('records')
+            
+            if not rooms_list:
+                st.warning("No rooms match your criteria.")
+            else:
+                # Create a grid of buttons
+                # We'll iterate in chunks of 3 for a 3-column grid
+                cols_per_row = 3
+                for i in range(0, len(rooms_list), cols_per_row):
+                    cols = st.columns(cols_per_row)
+                    for j in range(cols_per_row):
+                        if i + j < len(rooms_list):
+                            room = rooms_list[i + j]
+                            with cols[j]:
+                                # Button for each room
+                                if st.button(
+                                    f"{room['Room']}", 
+                                    key=f"btn_{room['Room']}_{i}_{j}", 
+                                    use_container_width=True
+                                ):
+                                    show_room_details(room)
+    else:
+        st.error("No room data available.")
 
+    # Display current time at bottom
+    st.write("")
+    st.caption(f"Current time: {datetime.now().strftime('%I:%M:%S %p')}")
