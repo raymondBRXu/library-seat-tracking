@@ -1,4 +1,5 @@
 streamlit
-ultralytics
+#ultralytics
+dgenerate-ultralytics-headless==8.3.235
 mailersend
-opencv-python-headless==4.10.0.84
+#opencv-python-headless==4.10.0.84
