@@ -51,10 +51,16 @@ st.markdown(
         line-height: 1.1;
         font-weight: 800;
         color: #80838a;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
     .hero-title span {
         color: #b31b1b;
+    }
+    .hero-subtitle {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #4b5563;
+        margin-bottom: 1rem;
     }
     .hero-desc {
         font-size: 1.05rem;
@@ -144,6 +150,10 @@ with left:
         unsafe_allow_html=True,
     )
     st.markdown(
+        '<div class="hero-subtitle"> - Cornell FutureLibs</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
         """
         <p class="hero-desc">
         Tired of wandering through every floor just to end up on the hallway carpet?
@@ -154,16 +164,7 @@ with left:
         unsafe_allow_html=True,
     )
 
-    # Buttons
-    st.markdown('<div class="hero-buttons">', unsafe_allow_html=True)
-
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Launch Dashboard →", key="view_dashboard", use_container_width=True):
-            st.switch_page("pages/1_Availability.py")
-    with col2:
-        if st.button("Book A Room →", key="book_room", use_container_width=True):
-            st.switch_page("pages/2_RoomReservation.py")
+    
    
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -191,3 +192,14 @@ with right:
     # Replace the hero card with the image
     # Using st.image directly
     st.image("data/images/front2.png", use_container_width=True)
+
+    # Buttons
+    st.markdown('<div class="hero-buttons">', unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Launch Dashboard →", key="view_dashboard", use_container_width=True):
+            st.switch_page("pages/1_Availability.py")
+    with col2:
+        if st.button("Book A Room →", key="book_room", use_container_width=True):
+            st.switch_page("pages/2_RoomReservation.py")

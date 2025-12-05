@@ -200,7 +200,7 @@ if hasattr(st, "dialog"):
                 ms = MailerSendClient(mailersend_api_key)
 
                 email = (EmailBuilder()
-                    .from_email("future.cornell.libs@test-xkjn41m1qx04z781.mlsender.net", "Future Cornell Libs")
+                    .from_email("future.cornell.libs@test-xkjn41m1qx04z781.mlsender.net", "Cornell FutureLibs")
                     .to_many([{"email": email_input, "name": "Student"}])
                     .subject("Confirmation on room reservation")
                     .html(f"""
