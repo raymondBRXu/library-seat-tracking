@@ -3,6 +3,12 @@ import csv
 import pandas as pd
 from pathlib import Path
 from datetime import datetime, timedelta, time
+from mailersend import MailerSendClient, EmailBuilder
+
+
+# You'll need to replace this with your actual MailerSend API key
+# For now I'll use a placeholder, please replace it with your key.
+mailersend_api_key = "mlsn.2bd1267c64270d886df86fc36d96cb7f2399dcff751f5fe2f070761a3dd5278c"
 
 st.set_page_config(page_title="Cornell Libraries – Room Reservation", layout="wide")
 
@@ -182,15 +188,38 @@ if hasattr(st, "dialog"):
                 st.success(f"Selected {num_selected} slots: {', '.join(selected_slots)}")
 
         st.markdown("### Contact Information")
-        email = st.text_input("Email Address", placeholder="netid@cornell.edu", key=f"email_{room['Room']}")
+        email_input = st.text_input("Email Address", placeholder="netid@cornell.edu", key=f"email_{room['Room']}")
         
         st.markdown("---")
         
         # Confirm Button
-        if st.button("Confirm Reservation", type="primary", key=f"confirm_{room['Room']}", disabled=(num_selected == 0 or num_selected > 4 or not email)):
+        if st.button("Confirm Reservation", type="primary", key=f"confirm_{room['Room']}", disabled=(num_selected == 0 or num_selected > 4 or not email_input)):
             # Logic to record data will go here
-            st.success(f"Reservation confirmed for {selected_date} at {', '.join(selected_slots)}!")
-            st.info("Reservation details have been recorded.")
+            try:
+                # Initialize MailerSend client
+                ms = MailerSendClient(mailersend_api_key)
+
+                email = (EmailBuilder()
+                    .from_email("future.cornell.libs@test-xkjn41m1qx04z781.mlsender.net", "Future Cornell Libs")
+                    .to_many([{"email": email_input, "name": "Student"}])
+                    .subject("Confirmation on room reservation")
+                    .html(f"""
+                    <p>Hi there,</p>
+                    <p>Your reservation for room <strong>{room['Room']}</strong> on <strong>{selected_date}</strong> has been confirmed!</p>
+                    <p><strong>Time Slots:</strong> {', '.join(selected_slots)}</p>
+                    <br>
+                    <p>Cheers</p>
+                    """)
+                    .text(f"Hi there, Your reservation for room {room['Room']} on {selected_date} has been confirmed! Time Slots: {', '.join(selected_slots)}. Cheers")
+                    .build())
+
+                response = ms.emails.send(email)
+                # print(f"Email sent: {response.message_id}") # For debugging
+                
+                st.success(f"Reservation confirmed for {selected_date} at {', '.join(selected_slots)}!")
+                st.info("A Confirmation Email Has Been Sent.")
+            except Exception as e:
+                st.error(f"Failed to send confirmation email: {e}")
 
 else:
     # Fallback for older streamlit versions (Simplified without wizard flow for now)
