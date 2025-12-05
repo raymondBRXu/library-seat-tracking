@@ -73,19 +73,23 @@ Note: The dashboard is deployed on streamlit community cloud which is free of ch
 ### Local Deployment
 
 First clone the repository:
+```bash
+git clone https://github.com/raymondBRXu/library-seat-tracking.git
 
-`git clone https://github.com/raymondBRXu/library-seat-tracking.git`
-
-`cd library-seat-tracking` (use the correct path on your device)
+cd library-seat-tracking # Use the correct path on your device
+```
 
 Run setup script: 
 
-`source setup.sh`
+```bash
+source setup.sh
+```
 
 Run the Dashboard:
+```bash
+streamlit run GUI/app.py
+```
 
-`streamlit run GUI/app.py`
-``
 
 
 
