@@ -2,7 +2,7 @@ import streamlit as st
 import csv
 import pandas as pd
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta, time
 
 st.set_page_config(page_title="Cornell Libraries – Room Reservation", layout="wide")
 
@@ -71,38 +71,129 @@ def load_rooms(csv_path: str = "data/library_rooms.csv") -> pd.DataFrame:
         st.error(f"Error loading room data: {e}")
         return pd.DataFrame()
 
+def generate_time_slots(selected_date):
+    """
+    Generate 30-minute time slots from 8:00 AM to 11:00 PM.
+    If selected_date is today, start from the next hour or half hour.
+    """
+    now = datetime.now()
+    slots = []
+    
+    start_time = datetime.combine(selected_date, time(8, 0))
+    end_time = datetime.combine(selected_date, time(23, 0))
+    
+    # If today, adjust start time
+    if selected_date == now.date():
+        # Round up to next 30 minutes
+        delta = timedelta(minutes=30)
+        next_slot = now + (datetime.min - now) % delta
+        if next_slot < start_time:
+            current_slot = start_time
+        else:
+            current_slot = next_slot
+    else:
+        current_slot = start_time
 
-# Define dialog wrapper
+    while current_slot <= end_time:
+        if current_slot >= start_time: # Ensure we don't go before 8 AM
+             slots.append(current_slot.strftime("%I:%M %p"))
+        current_slot += timedelta(minutes=30)
+        
+    return pd.DataFrame({"Time": slots, "Select": [False]*len(slots)})
+
+
+# Optimized Dialog: Single step with expander or just unconditional display
 if hasattr(st, "dialog"):
-    @st.dialog("Room Details")
+    @st.dialog("Room Reservation")
     def show_room_details(room):
         st.subheader(room['Room'])
         
-        # Display info
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown(f"**📍 Library:** {room['Library']}")
-            st.markdown(f"**🔊 Noise Level:** {room['Noise']}")
-        with col2:
-            st.markdown(f"**👥 Capacity:** {room['People']} people")
-        
-        # Features
-        features = []
-        if room.get('Project', 0) == 1: features.append("Projector")
-        if room.get('Whiteboard', 0) == 1: features.append("Whiteboard")
-        if room.get('Window', 0) == 1: features.append("Window")
-        
-        if features:
-            st.markdown(f"**✨ Features:** {', '.join(features)}")
-        else:
-            st.markdown("**✨ Features:** None")
+        # Always show details at top
+        with st.expander("Room Details", expanded=True):
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown(f"**📍 Library:** {room['Library']}")
+                st.markdown(f"**🔊 Noise Level:** {room['Noise']}")
+            with col2:
+                st.markdown(f"**👥 Capacity:** {room['People']} people")
             
+            features = []
+            if room.get('Project', 0) == 1: features.append("Projector")
+            if room.get('Whiteboard', 0) == 1: features.append("Whiteboard")
+            if room.get('Window', 0) == 1: features.append("Window")
+            
+            if features:
+                st.markdown(f"**✨ Features:** {', '.join(features)}")
+            else:
+                st.markdown("**✨ Features:** None")
+
+        st.markdown("---")
+        st.markdown("### Select Date & Time")
+        
+        # Date Selection
+        min_date = datetime.now().date()
+        max_date = min_date + timedelta(days=7)
+        
+        selected_date = st.date_input(
+            "Select Date",
+            min_value=min_date,
+            max_value=max_date,
+            value=min_date,
+            key=f"date_input_{room['Room']}"
+        )
+        
+        # Time Slots
+        st.markdown("Select Time Slots (Max 4 slots / 2 hours):")
+        
+        df_slots = generate_time_slots(selected_date)
+        
+        if df_slots.empty:
+            st.warning("No time slots available for this date.")
+            edited_df = df_slots
+        else:
+            edited_df = st.data_editor(
+                df_slots,
+                column_config={
+                    "Select": st.column_config.CheckboxColumn(
+                        "Select",
+                        help="Select time slot",
+                        default=False,
+                    ),
+                    "Time": st.column_config.TextColumn(
+                        "Time Slot",
+                        disabled=True
+                    )
+                },
+                hide_index=True,
+                key=f"slot_editor_{room['Room']}_{selected_date}",
+                use_container_width=True
+            )
+        
+        # Count selected slots
+        num_selected = 0
+        selected_slots = []
+        if not edited_df.empty:
+            selected_slots = edited_df[edited_df["Select"] == True]["Time"].tolist()
+            num_selected = len(selected_slots)
+            
+            if num_selected > 4:
+                st.error(f"⚠️ You have selected {num_selected} slots. Maximum allowed is 4.")
+            elif num_selected > 0:
+                st.success(f"Selected {num_selected} slots: {', '.join(selected_slots)}")
+
+        st.markdown("### Contact Information")
+        email = st.text_input("Email Address", placeholder="netid@cornell.edu", key=f"email_{room['Room']}")
+        
         st.markdown("---")
         
-        # Reserve Button (No function)
-        st.button("Reserve", type="primary", key=f"reserve_{room['Room']}")
+        # Confirm Button
+        if st.button("Confirm Reservation", type="primary", key=f"confirm_{room['Room']}", disabled=(num_selected == 0 or num_selected > 4 or not email)):
+            # Logic to record data will go here
+            st.success(f"Reservation confirmed for {selected_date} at {', '.join(selected_slots)}!")
+            st.info("Reservation details have been recorded.")
+
 else:
-    # Fallback for older streamlit versions
+    # Fallback for older streamlit versions (Simplified without wizard flow for now)
     def show_room_details(room):
         with st.expander(f"Details: {room['Room']}", expanded=True):
             st.markdown(f"**Library:** {room['Library']} | **Noise:** {room['Noise']} | **Capacity:** {room['People']}")
@@ -111,7 +202,7 @@ else:
             if room.get('Whiteboard', 0) == 1: features.append("Whiteboard")
             if room.get('Window', 0) == 1: features.append("Window")
             st.markdown(f"**Features:** {', '.join(features) if features else 'None'}")
-            st.button("Reserve", key=f"reserve_{room['Room']}")
+            st.button("Reserve (Update Streamlit for full feature)", key=f"reserve_{room['Room']}")
 
 
 def login_page(credentials: dict):
@@ -178,6 +269,12 @@ st.markdown(
         background: #ffffff;
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    div[data-testid="stButton"] button {
+        min_height: 60px;
+        height: 100%;
+        white-space: normal;
     }
     </style>
     """,
@@ -295,6 +392,8 @@ else:
                                     key=f"btn_{room['Room']}_{i}_{j}", 
                                     use_container_width=True
                                 ):
+                                    # Reset reservation step before opening
+                                    st.session_state["reservation_step"] = "details"
                                     show_room_details(room)
     else:
         st.error("No room data available.")
