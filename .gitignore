@@ -12,6 +12,7 @@
 !README.md
 !.gitignore
 !requirements.txt
+!FutureLibs.ipynb
 # Common ignores (applied recursively)
 .DS_Store
 __pycache__/
