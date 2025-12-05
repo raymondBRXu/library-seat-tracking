@@ -205,7 +205,7 @@ if hasattr(st, "dialog"):
                     .subject("Confirmation on room reservation")
                     .html(f"""
                     <p>Hi there,</p>
-                    <p>Your reservation for room <strong>{room['Room']}</strong> on <strong>{selected_date}</strong> has been confirmed!</p>
+                    <p>Your reservation for <strong>{room['Room']}</strong> on <strong>{selected_date}</strong> has been confirmed!</p>
                     <p><strong>Time Slots:</strong> {', '.join(selected_slots)}</p>
                     <br>
                     <p>Cheers</p>
@@ -374,7 +374,7 @@ else:
             filter_window = st.checkbox("Window")
             
             # Max People Filter (Slider 4-10)
-            st.markdown("**Max People**")
+            st.markdown("**Number of People**")
             min_people = st.slider("Minimum Capacity", min_value=4, max_value=10, value=4)
             
         # Apply Filters

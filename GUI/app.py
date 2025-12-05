@@ -120,6 +120,11 @@ st.markdown(
         display: flex;
         align-items: center;    /* keeps the text vertically centered */
     }
+    
+    /* Remove border radius for the image if displayed directly */
+    img {
+        border-radius: 0 !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -130,7 +135,7 @@ left, right = st.columns([3, 4])
 
 with left:
     st.markdown(
-        '<div class="hero-badge">🚀 Smart Library Information System</div>',
+        '<div class="hero-badge">🧑‍🎓 Campus Study Space Companion</div>',
         unsafe_allow_html=True,
     )
     st.markdown(
@@ -140,9 +145,9 @@ with left:
     st.markdown(
         """
         <p class="hero-desc">
-        Experience seamless, autonomous study space discovery with
-        AI-powered booking, real-time occupancy tracking, and digital
-        navigation. No waiting, no guessing.
+        Tired of wandering through every floor just to end up on the hallway carpet?
+        Check live occupancy for each library floor, find a good spot, 
+        and book a room in seconds — before you start walking.
         </p>
         """,
         unsafe_allow_html=True,
@@ -161,34 +166,27 @@ with left:
    
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # Stats row
+    # Stats row - Front Page Stats
     st.markdown('<div class="stats-row">', unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
     with c1:
         st.markdown(
-            '<div class="stat-item"><span>7</span><span>Libraries</span></div>',
+            '<div class="stat-item"><span>7</span><span>Libraries Covered</span></div>',
             unsafe_allow_html=True,
         )
     with c2:
         st.markdown(
-            '<div class="stat-item"><span>2,847</span><span>Total Seats</span></div>',
+            '<div class="stat-item"><span>24</span><span>Floors Mapped</span></div>',
             unsafe_allow_html=True,
         )
     with c3:
         st.markdown(
-            '<div class="stat-item"><span>0</span><span>Available Now</span></div>',
+            '<div class="stat-item"><span>58</span><span>Bookable Rooms</span></div>',
             unsafe_allow_html=True,
         )
     st.markdown("</div>", unsafe_allow_html=True)
 
 with right:
-    st.markdown(
-        """
-        <div class="hero-card">
-            <div class="hero-card-inner">
-                📊 Live Dashboard Preview
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    # Replace the hero card with the image
+    # Using st.image directly
+    st.image("data/images/front2.png", use_container_width=True)
