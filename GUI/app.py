@@ -7,7 +7,8 @@ project_root = Path(__file__).parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-from src.real_time_gen_deploy import start_background_generator
+# from src.real_time_gen_deploy import start_background_generator
+from src.people_counter import start_background_generator
 
 # Initialize the background task (cached resource)
 @st.cache_resource
@@ -176,12 +177,12 @@ with left:
         )
     with c2:
         st.markdown(
-            '<div class="stat-item"><span>24</span><span>Floors Mapped</span></div>',
+            '<div class="stat-item"><span>21</span><span>Floors Mapped</span></div>',
             unsafe_allow_html=True,
         )
     with c3:
         st.markdown(
-            '<div class="stat-item"><span>58</span><span>Bookable Rooms</span></div>',
+            '<div class="stat-item"><span>57</span><span>Bookable Rooms</span></div>',
             unsafe_allow_html=True,
         )
     st.markdown("</div>", unsafe_allow_html=True)
