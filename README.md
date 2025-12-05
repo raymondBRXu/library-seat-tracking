@@ -84,11 +84,35 @@ Run setup script:
 ```bash
 source setup.sh
 ```
+Or run
+
+```bash
+source setup_gitbash.sh
+```
+if you are running on Windows Git Bash Terminal
 
 Run the Dashboard:
 ```bash
 streamlit run GUI/app.py
 ```
+
+### How to Use it?
+
+Click Launch Dashboard to see occupancy status. The data is updated every 5 seconds, please click refresh at least 5 seconds after launching to see an updated number. 
+![Front Page](data/images/heropage.png)
+
+Click on a library you want to go, click Go There, and you will be prompted to a Google Map Page for navigation.
+![Dashboard](data/images/dashboard_page.png)
+
+
+Click Boom A Room at home page, use one of the test accounts to log in.
+![Rooms](data/images/login.png)
+
+Adjust the filters based on your requirements, and click on a room to book.
+![Rooms_list](data/images/rooms.png)
+
+Select a date in next 7 days, and pick at most 4 time slots to book (Each slot represents the start time and has 30 minutes period). Enter your email address and click Confirm Booking to lock your room. An email will be sent to your inbox shortly.
+![Reserve](data/images/reserve.png)
 
 
 
