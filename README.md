@@ -57,7 +57,8 @@ library-seat-tracking/
 ├── FutureLibs.ipynb               # Introduction Notebook
 ├── README.md                      # README
 ├── requirements.txt               # Required Packages
-└── setup.sh                       # Setup Script for Virtual Environment Creation and Dependencies Installation
+├── setup.sh                       # Setup Script for Virtual Environment Creation and Dependencies Installation               
+└── setup_gitbash.sh               # Setup Script for Git Bash Terminal Users
 
 ```
 

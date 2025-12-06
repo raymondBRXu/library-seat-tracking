@@ -38,6 +38,7 @@ echo "------------------------------------------------------------------"
 echo "Setup complete!"
 echo ""
 echo "To start the application:"
-echo "  1. Activate the environment: source $VENV_DIR/bin/activate"
+echo "  1. Activate the environment: source $VENV_DIR/Scripts/activate" if virtual environment is not activated.
+echo "     Skip this step if virtual environment is already activated."
 echo "  2. Run the app: streamlit run GUI/app.py"
 echo "------------------------------------------------------------------"
